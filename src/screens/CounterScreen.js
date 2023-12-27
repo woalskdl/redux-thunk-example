@@ -8,9 +8,15 @@ import { Typography } from "../components/Typography";
 // import { useDispatch, useSelector } from 'react-redux';
 import { addCount, deleteCount } from "../actions/counter";
 import { CounterContext } from "../../App";
+import { counterState } from "../states/counter";
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { counterMultiplier } from "../selectors/counterMultiplier";
 
 const CounterTitle = () => {
-    const [count] = useContext(CounterContext);
+    // const [count] = useContext(CounterContext);
+
+    const count = useRecoilValue(counterState);
+
     return (
         <Typography fontSize={20}>
             {`${count}개`}
@@ -18,12 +24,24 @@ const CounterTitle = () => {
     )
 }
 
+const CountMultiplier = () => {
+    const result = useRecoilValue(counterMultiplier);
+
+    return (
+        <Typography fontSize={20}>
+            {`* 5 = ${result}개`}
+        </Typography>
+    )
+}
+
 export const CounterScreen = (props) => {
-    const [_, setCount] = useContext(CounterContext);
+    // const [_, setCount] = useContext(CounterContext);
     // const [value, setValue] = useState(0);
     // const dispatch = useDispatch();
     // const value = useSelector((state) => state.count.count);
 
+    const [count, setCount] = useRecoilState(counterState);
+    
     const onPressMinus = useCallback(() => {
         setCount((value) => value - 1);
         // dispatch(deleteCount());
@@ -48,7 +66,7 @@ export const CounterScreen = (props) => {
 
                     <Spacer horizontal space={20}/>
 
-                    <CounterTitle/>
+                    <CounterTitle />
 
                     <Spacer horizontal space={20}/>
 
@@ -57,6 +75,7 @@ export const CounterScreen = (props) => {
                     </Button>
                     
                 </View>
+                <CountMultiplier/>
             </View>
         </View>
     )
